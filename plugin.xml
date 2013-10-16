@@ -33,6 +33,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="window.FileError" />
     </js-module>
 
+    <js-module src="www/FileExec.js" name="FileExec">
+        <clobbers target="window.FileExec" />
+    </js-module>
+
     <js-module src="www/FileReader.js" name="FileReader">
         <clobbers target="window.FileReader" />
     </js-module>

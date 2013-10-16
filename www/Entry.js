@@ -20,7 +20,7 @@
 */
 
 var argscheck = require('cordova/argscheck'),
-    exec = require('cordova/exec'),
+    exec = require('./FileExec'),
     FileError = require('./FileError'),
     Metadata = require('./Metadata');
 

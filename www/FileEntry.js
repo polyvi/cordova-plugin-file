@@ -20,7 +20,7 @@
 */
 
 var utils = require('cordova/utils'),
-    exec = require('cordova/exec'),
+    exec = require('./FileExec'),
     Entry = require('./Entry'),
     FileWriter = require('./FileWriter'),
     File = require('./File'),

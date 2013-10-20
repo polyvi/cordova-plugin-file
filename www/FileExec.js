@@ -59,7 +59,8 @@ function FileExec() {
         ("truncate" === action) ){
         var result = workspace.checkWorkspace(privateModule.appWorkspace(), fullPath, functionName);
         if (!result){
-            failCallback(FileError.INVALID_MODIFICATION_ERR);
+            var fileError = ("setMetadata" !== action) ? FileError.INVALID_MODIFICATION_ERR : undefined;
+            failCallback(fileError);
             return;
         }
     }else if( ("getDirectory" === action) || ("getFile" === action) ){
@@ -76,7 +77,7 @@ function FileExec() {
 
     if( ("moveTo" === action) || ("copyTo" === action)){
         var parentPath = actionArgs[1];
-        var newName = actionArgs[3];
+        var newName = actionArgs[2];
         var newFullPath = workspace.buildPath(parentPath, newName);
 
         var result = workspace.checkWorkspace(privateModule.appWorkspace(), newFullPath, functionName);

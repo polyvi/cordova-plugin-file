@@ -1166,7 +1166,8 @@ namespace WPCordovaClassLib.Cordova.Commands
             if (uri != null)
             {
                 // a single '/' is valid, however, '/someDir' is not, but '/tmp//somedir' and '///someDir' are valid
-                if (uri.StartsWith("/") && uri.IndexOf("//") < 0 && uri != "/")
+                // /tmp/somedir is valid ??
+                if (uri.StartsWith("/") && uri.IndexOf("//") < 0 && uri != "/" && (uri.LastIndexOf("/") == 0) )
                 {
                      DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, ENCODING_ERR), callbackId);
                      return;

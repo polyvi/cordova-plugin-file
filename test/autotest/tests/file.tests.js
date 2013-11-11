@@ -3526,7 +3526,7 @@ describe('File API', function() {
                 expect(fail).not.toHaveBeenCalled();
             });
         });
-        it("file.spec.105 should be able to write binary data from a Blob", function() {
+        it("file.spec.105 should be able to write binary data from a Blob. Skip test if Blobs are not supported (e.g.: Android 2.3)", function() {
             // Skip test if Blobs are not supported (e.g.: Android 2.3).
             if (typeof window.Blob == 'undefined' || typeof window.ArrayBuffer == 'undefined') {
                 return;

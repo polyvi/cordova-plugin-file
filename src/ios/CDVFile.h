@@ -39,11 +39,54 @@ typedef int CDVFileError;
 
 enum CDVFileSystemType {
     TEMPORARY = 0,
-    PERSISTENT = 1
+    PERSISTENT = 1,
+    ASSETS_LIBRARY = 2,
 };
 typedef int CDVFileSystemType;
 
-extern NSString* const kCDVAssetsLibraryPrefix;
+@interface CDVFilesystemURL : NSObject  {
+    NSURL *_url;
+    CDVFileSystemType _fileSystemType;
+    NSString *_fullPath;
+}
+
+- (id) initWithString:(NSString*)strURL;
+- (id) initWithURL:(NSURL*)URL;
++ (CDVFilesystemURL *)fileSystemURLWithString:(NSString *)strURL;
++ (CDVFilesystemURL *)fileSystemURLWithURL:(NSURL *)URL;
+
+
+@property (atomic) NSURL *url;
+@property (atomic) CDVFileSystemType fileSystemType;
+@property (atomic) NSString *fullPath;
+
+@end
+
+@interface CDVFilesystemURLProtocol : NSURLProtocol
+@end
+
+@protocol CDVFileSystem
+- (CDVPluginResult *)entryForLocalURI:(CDVFilesystemURL *)url;
+- (CDVPluginResult *)getFileForURL:(CDVFilesystemURL *)baseURI requestedPath:(NSString *)requestedPath options:(NSDictionary *)options;
+- (CDVPluginResult*)getParentForURL:(CDVFilesystemURL *)localURI;
+- (void)getMetadataForURL:(CDVFilesystemURL *)url callback:(void (^)(CDVPluginResult *))callback;
+- (CDVPluginResult*)setMetadataForURL:(CDVFilesystemURL *)localURI withObject:(NSDictionary *)options;
+- (CDVPluginResult *)removeFileAtURL:(CDVFilesystemURL *)localURI;
+- (CDVPluginResult *)recursiveRemoveFileAtURL:(CDVFilesystemURL *)localURI;
+- (CDVPluginResult *)readEntriesAtURL:(CDVFilesystemURL *)localURI;
+- (CDVPluginResult *)truncateFileAtURL:(CDVFilesystemURL *)localURI atPosition:(unsigned long long)pos;
+- (CDVPluginResult *)writeToFileAtURL:(CDVFilesystemURL *)localURL withData:(NSData*)encData append:(BOOL)shouldAppend;
+- (void)copyFileToURL:(CDVFilesystemURL *)destURL withName:(NSString *)newName fromFileSystem:(NSObject<CDVFileSystem> *)srcFs atURL:(CDVFilesystemURL *)srcURL copy:(BOOL)bCopy callback:(void (^)(CDVPluginResult *))callback;
+- (void)readFileAtURL:(CDVFilesystemURL *)localURL start:(NSInteger)start end:(NSInteger)end callback:(void (^)(NSData*, NSString* mimeType, CDVFileError))callback;
+- (void)getFileMetadataForURL:(CDVFilesystemURL *)localURL callback:(void (^)(CDVPluginResult *))callback;
+
+- (NSDictionary *)makeEntryForLocalURL:(CDVFilesystemURL *)url;
+
+@optional
+- (NSString *)filesystemPathForURL:(CDVFilesystemURL *)localURI;
+- (CDVFilesystemURL *)URLforFilesystemPath:(NSString *)path;
+
+@end
 
 @interface CDVFile : CDVPlugin {
     NSString* appDocsPath;
@@ -52,13 +95,18 @@ extern NSString* const kCDVAssetsLibraryPrefix;
     NSString* persistentPath;
     NSString* temporaryPath;
 
+    NSMutableArray* fileSystems_;
     BOOL userHasAllowed;
 }
+
 - (NSNumber*)checkFreeDiskSpace:(NSString*)appPath;
-- (NSString*)getAppPath:(NSString*)pathFragment;
-// -(NSString*) getFullPath: (NSString*)pathFragment;
+- (NSDictionary*)makeEntryForPath:(NSString*)fullPath fileSystem:(int)fsType isDirectory:(BOOL)isDir;
+- (NSDictionary *)makeEntryForURL:(NSURL *)URL;
+
+- (NSObject<CDVFileSystem> *)filesystemForURL:(CDVFilesystemURL *)localURL;
+
+/* Exec API */
 - (void)requestFileSystem:(CDVInvokedUrlCommand*)command;
-- (NSDictionary*)getDirectoryEntry:(NSString*)fullPath isDirectory:(BOOL)isDir;
 - (void)resolveLocalFileSystemURI:(CDVInvokedUrlCommand*)command;
 - (void)getDirectory:(CDVInvokedUrlCommand*)command;
 - (void)getFile:(CDVInvokedUrlCommand*)command;
@@ -66,39 +114,30 @@ extern NSString* const kCDVAssetsLibraryPrefix;
 - (void)getMetadata:(CDVInvokedUrlCommand*)command;
 - (void)removeRecursively:(CDVInvokedUrlCommand*)command;
 - (void)remove:(CDVInvokedUrlCommand*)command;
-- (CDVPluginResult*)doRemove:(NSString*)fullPath;
 - (void)copyTo:(CDVInvokedUrlCommand*)command;
 - (void)moveTo:(CDVInvokedUrlCommand*)command;
-- (BOOL)canCopyMoveSrc:(NSString*)src ToDestination:(NSString*)dest;
-- (void)doCopyMove:(CDVInvokedUrlCommand*)command isCopy:(BOOL)bCopy;
-// - (void) toURI:(CDVInvokedUrlCommand*)command;
 - (void)getFileMetadata:(CDVInvokedUrlCommand*)command;
 - (void)readEntries:(CDVInvokedUrlCommand*)command;
-
 - (void)readAsText:(CDVInvokedUrlCommand*)command;
 - (void)readAsDataURL:(CDVInvokedUrlCommand*)command;
 - (void)readAsArrayBuffer:(CDVInvokedUrlCommand*)command;
-- (NSString*)getMimeTypeFromPath:(NSString*)fullPath;
 - (void)write:(CDVInvokedUrlCommand*)command;
 - (void)testFileExists:(CDVInvokedUrlCommand*)command;
 - (void)testDirectoryExists:(CDVInvokedUrlCommand*)command;
-// - (void) createDirectory:(CDVInvokedUrlCommand*)command;
-// - (void) deleteDirectory:(CDVInvokedUrlCommand*)command;
-// - (void) deleteFile:(CDVInvokedUrlCommand*)command;
 - (void)getFreeDiskSpace:(CDVInvokedUrlCommand*)command;
 - (void)truncate:(CDVInvokedUrlCommand*)command;
+- (void)doCopyMove:(CDVInvokedUrlCommand*)command isCopy:(BOOL)bCopy;
 
-// - (BOOL) fileExists:(NSString*)fileName;
-// - (BOOL) directoryExists:(NSString*)dirName;
-- (void)writeToFile:(NSString*)fileName withData:(NSData*)data append:(BOOL)shouldAppend callback:(NSString*)callbackId;
-- (void)writeToFile:(NSString*)fileName withString:(NSString*)data encoding:(NSStringEncoding)encoding append:(BOOL)shouldAppend callback:(NSString*)callbackId;
-- (unsigned long long)truncateFile:(NSString*)filePath atPosition:(unsigned long long)pos;
+/* Compatibilty with older File API */
+- (NSString*)getMimeTypeFromPath:(NSString*)fullPath;
 
 @property (nonatomic, strong) NSString* appDocsPath;
 @property (nonatomic, strong) NSString* appLibraryPath;
 @property (nonatomic, strong) NSString* appTempPath;
 @property (nonatomic, strong) NSString* persistentPath;
 @property (nonatomic, strong) NSString* temporaryPath;
+@property (nonatomic, strong) NSMutableArray* fileSystems;
+
 @property BOOL userHasAllowed;
 
 @end

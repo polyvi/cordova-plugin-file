@@ -57,7 +57,8 @@ module.exports = function(uri, successCallback, errorCallback) {
                 }
                 else {
                     // create appropriate Entry object
-                    result = (entry.isDirectory) ? new DirectoryEntry(entry.name, entry.fullPath) : new FileEntry(entry.name, entry.fullPath);
+                    fs = new FileSystem(entry.filesystem == window.PERSISTENT ? 'persistent' : 'temporary');
+                    result = (entry.isDirectory) ? new DirectoryEntry(entry.name, entry.fullPath, fs) : new FileEntry(entry.name, entry.fullPath, fs);
                     successCallback(result);
                 }
             }

@@ -299,7 +299,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.9 DirectoryEntry.removeRecursively on workspace parent: should error (INVALID_MODIFICATION_ERR) when fullPath points to workspace parent dir", function() {
-                var entry = new DirectoryEntry('entry.workspace.parent.dir', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("DirectoryEntry", root);
+                var entry = new DirectoryEntry('entry.workspace.parent.dir', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -318,7 +319,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.10 DirectoryEntry.removeRecursively on workspace: should error (NO_MODIFICATION_ALLOWED_ERR) when fullPath points to workspace dir", function() {
-                var entry = new DirectoryEntry('entry.workspace.dir', root.fullPath),
+                var fileSystem = new FileSystem("DirectoryEntry", root);
+                var entry = new DirectoryEntry('entry.workspace.dir', root.fullPath, fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.NO_MODIFICATION_ALLOWED_ERR);
@@ -388,7 +390,8 @@ describe('File API', function() {
 
         describe('FileEntry', function() {
             it("file.xface.spec.13 file: should error (INVALID_MODIFICATION_ERR) when fullPath points to workspace parent dir", function() {
-                var fileEntry = new FileEntry('fe.name', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("FileEntry", root);
+                var fileEntry = new FileEntry('fe.name', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -409,7 +412,8 @@ describe('File API', function() {
         });
         describe('Entry', function() {
             it("file.xface.spec.14 Entry.getMetadata on file: should error (INVALID_MODIFICATION_ERR) when fullPath points to workspace parent dir", function() {
-                var entry = new Entry(true, false, 'entry.metadata.file', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(true, false, 'entry.metadata.file', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -428,7 +432,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.15 Entry.getMetadata on directory: should error (INVALID_MODIFICATION_ERR) when fullPath points to workspace parent dir", function() {
-                var entry = new Entry(false, true, 'entry.metadata.dir', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(false, true, 'entry.metadata.dir', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -447,7 +452,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.16 Entry.setMetadata on file: should error (INVALID_MODIFICATION_ERR) when fullPath points to workspace parent dir", function() {
-                var entry = new Entry(true, false, 'entry.metadata.file', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(true, false, 'entry.metadata.file', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeUndefined();
                     }),
@@ -465,7 +471,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.17 Entry.setMetadata on directory: should error (INVALID_MODIFICATION_ERR) when fullPath points to workspace parent dir", function() {
-                var entry = new Entry(false, true, 'entry.metadata.dir', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(false, true, 'entry.metadata.dir', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeUndefined();
                     }),
@@ -483,7 +490,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.18 Entry.getParent on file in root file system", function() {
-                var entry = new Entry(true, false, 'entry.parent.file', root.fullPath),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(true, false, 'entry.parent.file', root.fullPath, fileSystem),
                     win = jasmine.createSpy().andCallFake(function(parent) {
                         expect(parent).toBeDefined();
                         expect(parent.name).toBe("workspace");
@@ -503,7 +511,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.19 Entry.getParent on file: should error (INVALID_MODIFICATION_ERR) when fullPath points to workspace parent dir", function() {
-                var entry = new Entry(true, false, 'entry.parent.file', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(true, false, 'entry.parent.file', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -522,7 +531,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.20 Entry.getParent on directory in root file system", function() {
-                var entry = new Entry(false, true, 'entry.parent.dir', root.fullPath),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(false, true, 'entry.parent.dir', root.fullPath, fileSystem),
                     win = jasmine.createSpy().andCallFake(function(parent) {
                         expect(parent).toBeDefined();
                         expect(parent.name).toBe("workspace");
@@ -542,7 +552,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.21 Entry.getParent on directory: should error (INVALID_MODIFICATION_ERR) when fullPath points to workspace parent dir", function() {
-                var entry = new Entry(false, true, 'entry.parent.dir', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(false, true, 'entry.parent.dir', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -561,7 +572,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.22 Entry.getParent on workspace", function() {
-                var entry = new Entry(false, true, 'entry.workspace.dir', root.fullPath),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(false, true, 'entry.workspace.dir', root.fullPath, fileSystem),
                     itParent = jasmine.createSpy().andCallFake(function(parent) {
                         expect(parent).toBeDefined();
                         expect(parent.name).toBe("workspace");
@@ -601,7 +613,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.24 Entry.remove on workspace parent: should error (INVALID_MODIFICATION_ERR) when fullPath points to workspace parent dir", function() {
-                var entry = new Entry(false, true, 'entry.workspace.parent.dir', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(false, true, 'entry.workspace.parent.dir', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -620,7 +633,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.25 Entry.remove on workspace: should error (NO_MODIFICATION_ALLOWED_ERR) when fullPath points to workspace dir", function() {
-                var entry = new Entry(false, true, 'entry.workspace.dir', root.fullPath),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(false, true, 'entry.workspace.dir', root.fullPath, fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.NO_MODIFICATION_ALLOWED_ERR);
@@ -658,7 +672,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.27 copyTo file: should error (INVALID_MODIFICATION_ERR) when src file fullPath points to workspace parent dir", function() {
-                var entry = new Entry(true, false, 'entry.copy.file', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(true, false, 'entry.copy.file', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -677,7 +692,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.28 copyTo directory: should error (INVALID_MODIFICATION_ERR) when src directory fullPath points to workspace parent dir", function() {
-                var entry = new Entry(false, true, 'entry.copy.dir', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(false, true, 'entry.copy.dir', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -696,7 +712,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.29 copyTo file: should error (INVALID_MODIFICATION_ERR) when src dest file fullPath points to workspace parent dir", function() {
-                var entry = new Entry(true, false, 'entry.copy.file', root.fullPath),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(true, false, 'entry.copy.file', root.fullPath, fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -715,7 +732,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.30 copyTo directory: should error (INVALID_MODIFICATION_ERR) when dest directory fullPath points to workspace parent dir", function() {
-                var entry = new Entry(false, true, 'entry.copy.dir', root.fullPath),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(false, true, 'entry.copy.dir', root.fullPath, fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -736,7 +754,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.31 moveTo file: should error (INVALID_MODIFICATION_ERR) when src file fullPath points to workspace parent dir", function() {
-                var entry = new Entry(true, false, 'entry.move.file', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(true, false, 'entry.move.file', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -755,7 +774,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.32 moveTo directory: should error (INVALID_MODIFICATION_ERR) when src directory fullPath points to workspace parent dir", function() {
-                var entry = new Entry(false, true, 'entry.move.dir', root.fullPath.replace('workspace', '')),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(false, true, 'entry.move.dir', root.fullPath.replace('workspace', ''), fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -774,7 +794,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.33 moveTo file: should error (INVALID_MODIFICATION_ERR) when src dest file fullPath points to workspace parent dir", function() {
-                var entry = new Entry(true, false, 'entry.move.file', root.fullPath),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(true, false, 'entry.move.file', root.fullPath, fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -795,7 +816,8 @@ describe('File API', function() {
                 });
             });
             it("file.xface.spec.34 moveTo directory: should error (INVALID_MODIFICATION_ERR) when dest directory fullPath points to workspace parent dir", function() {
-                var entry = new Entry(false, true, 'entry.move.dir', root.fullPath),
+                var fileSystem = new FileSystem("Entry", root);
+                var entry = new Entry(false, true, 'entry.move.dir', root.fullPath, fileSystem),
                     fail = jasmine.createSpy().andCallFake(function(error) {
                         expect(error).toBeDefined();
                         expect(error).toBeFileError(FileError.INVALID_MODIFICATION_ERR);
@@ -909,7 +931,7 @@ describe('File API', function() {
         it("file.xface.spec.41 should define File attributes", function() {
             var file = new File();
             expect(file.name).toBeDefined();
-            expect(file.fullPath).toBeDefined();
+            expect(file.localURL).toBeDefined();
             expect(file.type).toBeDefined();
             expect(file.lastModifiedDate).toBeDefined();
             expect(file.size).toBeDefined();

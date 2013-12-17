@@ -37,6 +37,9 @@ var argscheck = require('cordova/argscheck'),
  * @param fullPath
  *            {DOMString} the absolute full path to the file or directory
  *            (readonly)
+ * @param fileSystem
+ *            {FileSystem} the filesystem on which this entry resides
+ *            (readonly)
  */
 function Entry(isFile, isDirectory, name, fullPath, fileSystem) {
     this.isFile = !!isFile;
@@ -63,8 +66,7 @@ Entry.prototype.getMetadata = function(successCallback, errorCallback) {
     var fail = errorCallback && function(code) {
         errorCallback(new FileError(code));
     };
-
-    exec(success, fail, "File", "getMetadata", [this.fullPath]);
+    exec(success, fail, "File", "getMetadata", [this.filesystem.__format__(this.fullPath)]);
 };
 
 /**
@@ -99,15 +101,16 @@ Entry.prototype.moveTo = function(parent, newName, successCallback, errorCallbac
     var fail = errorCallback && function(code) {
         errorCallback(new FileError(code));
     };
+    var fs = this.filesystem // Copy / move op cannot cross filesystems;
     // source path
-    var srcPath = this.fullPath,
+        var srcURL = this.filesystem.__format__(this.fullPath);
         // entry name
         name = newName || this.name,
         success = function(entry) {
             if (entry) {
                 if (successCallback) {
                     // create appropriate Entry object
-                    var result = (entry.isDirectory) ? new (require('./DirectoryEntry'))(entry.name, entry.fullPath) : new (require('org.apache.cordova.file.FileEntry'))(entry.name, entry.fullPath);
+                    var result = (entry.isDirectory) ? new (require('./DirectoryEntry'))(entry.name, entry.fullPath, fs) : new (require('org.apache.cordova.file.FileEntry'))(entry.name, entry.fullPath, fs);
                     successCallback(result);
                 }
             }
@@ -118,7 +121,7 @@ Entry.prototype.moveTo = function(parent, newName, successCallback, errorCallbac
         };
 
     // copy
-    exec(success, fail, "File", "moveTo", [srcPath, parent.fullPath, name]);
+    exec(success, fail, "File", "moveTo", [srcURL, parent.filesystem.__format__(parent.fullPath), name]);
 };
 
 /**
@@ -138,9 +141,9 @@ Entry.prototype.copyTo = function(parent, newName, successCallback, errorCallbac
     var fail = errorCallback && function(code) {
         errorCallback(new FileError(code));
     };
-
+    var fs = this.filesystem // Copy / move op cannot cross filesystems;
         // source path
-    var srcPath = this.fullPath,
+    var srcURL = this.filesystem.__format__(this.fullPath),
         // entry name
         name = newName || this.name,
         // success callback
@@ -148,7 +151,7 @@ Entry.prototype.copyTo = function(parent, newName, successCallback, errorCallbac
             if (entry) {
                 if (successCallback) {
                     // create appropriate Entry object
-                    var result = (entry.isDirectory) ? new (require('./DirectoryEntry'))(entry.name, entry.fullPath) : new (require('org.apache.cordova.file.FileEntry'))(entry.name, entry.fullPath);
+                    var result = (entry.isDirectory) ? new (require('./DirectoryEntry'))(entry.name, entry.fullPath, fs) : new (require('org.apache.cordova.file.FileEntry'))(entry.name, entry.fullPath, fs);
                     successCallback(result);
                 }
             }
@@ -159,15 +162,18 @@ Entry.prototype.copyTo = function(parent, newName, successCallback, errorCallbac
         };
 
     // copy
-    exec(success, fail, "File", "copyTo", [srcPath, parent.fullPath, name]);
+    exec(success, fail, "File", "copyTo", [srcURL, parent.filesystem.__format__(parent.fullPath), name]);
 };
 
 /**
  * Return a URL that can be used to identify this entry.
  */
 Entry.prototype.toURL = function() {
+    if (this.filesystem && this.filesystem.__format__) {
+      return this.filesystem.__format__(this.fullPath);
+    }
     // fullPath attribute contains the full URL
-    return this.fullPath;
+    return "file://localhost" + this.fullPath;
 };
 
 /**
@@ -195,7 +201,7 @@ Entry.prototype.remove = function(successCallback, errorCallback) {
     var fail = errorCallback && function(code) {
         errorCallback(new FileError(code));
     };
-    exec(successCallback, fail, "File", "remove", [this.fullPath]);
+    exec(successCallback, fail, "File", "remove", [this.filesystem.__format__(this.fullPath)]);
 };
 
 /**
@@ -206,15 +212,16 @@ Entry.prototype.remove = function(successCallback, errorCallback) {
  */
 Entry.prototype.getParent = function(successCallback, errorCallback) {
     argscheck.checkArgs('FF', 'Entry.getParent', arguments);
+    var fs = this.filesystem;
     var win = successCallback && function(result) {
         var DirectoryEntry = require('./DirectoryEntry');
-        var entry = new DirectoryEntry(result.name, result.fullPath);
+        var entry = new DirectoryEntry(result.name, result.fullPath, fs);
         successCallback(entry);
     };
     var fail = errorCallback && function(code) {
         errorCallback(new FileError(code));
     };
-    exec(win, fail, "File", "getParent", [this.fullPath]);
+    exec(win, fail, "File", "getParent", [this.filesystem.__format__(this.fullPath)]);
 };
 
 module.exports = Entry;

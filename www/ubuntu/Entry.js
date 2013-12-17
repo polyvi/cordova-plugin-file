@@ -19,24 +19,14 @@
  *
 */
 
-var DirectoryEntry = require('./DirectoryEntry');
-
-/**
- * An interface representing a file system
- *
- * @constructor
- * {DOMString} name the unique name of the file system (readonly)
- * {DirectoryEntry} root directory of the file system (readonly)
- */
-var FileSystem = function(name, root) {
-    this.name = name || null;
-    if (root) {
-        this.root = new DirectoryEntry(root.name, root.fullPath, this);
+module.exports = {
+    toURL:function() {
+        // TODO: refactor path in a cross-platform way so we can eliminate
+        // these kinds of platform-specific hacks.
+        return "file://localhost" + this.fullPath;
+    },
+    toURI: function() {
+        console.log("DEPRECATED: Update your code to use 'toURL'");
+        return "file://localhost" + this.fullPath;
     }
 };
-
-FileSystem.prototype.__format__ = function(fullPath) {
-    return fullPath;
-};
-
-module.exports = FileSystem;

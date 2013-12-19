@@ -51,13 +51,13 @@ module.exports = function(uri, successCallback, errorCallback) {
         var result;
         if (entry) {
             if (successCallback) {
-                result = workspace.checkWorkspace(privateModule.appWorkspace(), entry.fullPath, 'resolveLocalFileSystemURI');
+                // create appropriate Entry object
+                fs = new FileSystem(entry.filesystem == window.PERSISTENT ? 'persistent' : 'temporary');
+                result = workspace.checkWorkspace(fs.__format__(privateModule.appWorkspace()), fs.__format__(entry.fullPath), 'resolveLocalFileSystemURI');
                 if (!result) {
                     fail(FileError.SECURITY_ERR);
                 }
                 else {
-                    // create appropriate Entry object
-                    fs = new FileSystem(entry.filesystem == window.PERSISTENT ? 'persistent' : 'temporary');
                     result = (entry.isDirectory) ? new DirectoryEntry(entry.name, entry.fullPath, fs) : new FileEntry(entry.name, entry.fullPath, fs);
                     successCallback(result);
                 }

@@ -40,6 +40,11 @@ function FileExec() {
         throw new Error('Plugin ' + service + ' should not use fileExec.');
     }
 
+    //FIXME:现在只支持'persistent'
+    //对于iOS，android平台而言, 这里的basePath与fullPath实际上是形如'filesystem://localhost/persistent/path'的uri
+    var fs = new FileSystem('persistent');
+    var basePath = fs.__format__(privateModule.appWorkspace());
+
     var fullPath = actionArgs[0];
     var functionName = service + '.' + action;
     if( ("getMetadata" === action) ||
@@ -57,7 +62,7 @@ function FileExec() {
         ("readAsArrayBuffer" === action) ||
         ("write" === action) ||
         ("truncate" === action) ){
-        var result = workspace.checkWorkspace(privateModule.appWorkspace(), fullPath, functionName);
+        var result = workspace.checkWorkspace(basePath, fullPath, functionName);
         if (!result){
             var fileError = ("setMetadata" !== action) ? FileError.INVALID_MODIFICATION_ERR : undefined;
             failCallback(fileError);
@@ -65,7 +70,7 @@ function FileExec() {
         }
     }else if( ("getDirectory" === action) || ("getFile" === action) ){
         var path = actionArgs[1];
-        var result = workspace.checkWorkspace(privateModule.appWorkspace(), fullPath, functionName);
+        var result = workspace.checkWorkspace(basePath, fullPath, functionName);
         if (!result){
             failCallback(FileError.INVALID_MODIFICATION_ERR);
             return;
@@ -80,21 +85,21 @@ function FileExec() {
         var newName = actionArgs[2];
         var newFullPath = workspace.buildPath(parentPath, newName);
 
-        var result = workspace.checkWorkspace(privateModule.appWorkspace(), newFullPath, functionName);
+        var result = workspace.checkWorkspace(basePath, newFullPath, functionName);
         if (!result){
             failCallback(FileError.INVALID_MODIFICATION_ERR);
             return;
         }
     }else if( ("remove" === action) || ("removeRecursively" === action) ){
-        if(fullPath == privateModule.appWorkspace()){
+        if(fullPath == basePath){
             // TODO:增加工具方法处理fullPath以“/”结尾的情况
             failCallback(FileError.NO_MODIFICATION_ALLOWED_ERR);
             return;
         }
     }else if("getParent" === action){
-        if(fullPath == privateModule.appWorkspace()){
+        if(fullPath == basePath){
             var DirectoryEntry = require('./DirectoryEntry');
-            var entry = new DirectoryEntry('workspace', fullPath);
+            var entry = new DirectoryEntry('workspace', privateModule.appWorkspace(), fs);
             successCallback(entry);
             return;
         }

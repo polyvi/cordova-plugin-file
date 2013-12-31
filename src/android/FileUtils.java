@@ -34,6 +34,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.polyvi.xface.view.XAppWebView;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -92,6 +94,12 @@ public class FileUtils extends CordovaPlugin {
     		persistentRoot = "/data/data/" + cordova.getActivity().getPackageName();
     		tempRoot = "/data/data/" + cordova.getActivity().getPackageName() + "/cache/";
     	}
+
+        // Reset persistentRoot and tempRoot to workspace
+        XAppWebView appWebView = (XAppWebView)webView;
+        persistentRoot = appWebView.getOwnerApp().getWorkSpace();
+        tempRoot = appWebView.getOwnerApp().getWorkSpace();
+
     	// Create the cache dir if it doesn't exist.
     	fp = new File(tempRoot);
     	fp.mkdirs();

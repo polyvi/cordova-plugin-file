@@ -19,6 +19,19 @@
  *
 */
 
+if (isAndroid()) {
+    //Android platform skips file.xface.test.js
+    var _it = it;
+    it = function (text, funk) {
+        if (text.indexOf("File API") == 0) {
+            return _it(text, funk);
+        }
+        else {
+            console.log("Skipping Test : " + text);
+        }
+    }
+}
+
 describe('File API', function() {
     // Adding a Jasmine helper matcher, to report errors when comparing to FileError better.
     var fileErrorMap = {

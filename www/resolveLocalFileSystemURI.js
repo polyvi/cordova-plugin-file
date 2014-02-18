@@ -23,9 +23,7 @@ var argscheck = require('cordova/argscheck'),
     DirectoryEntry = require('./DirectoryEntry'),
     FileEntry = require('./FileEntry'),
     FileError = require('./FileError'),
-    exec = require('cordova/exec'),
-    privateModule = require('xFace/privateModule'),
-    workspace = require('xFace/workspace');
+    exec = require('cordova/exec');
 
 /**
  * Look up file system Entry referred to by local URI.
@@ -51,15 +49,9 @@ module.exports = function(uri, successCallback, errorCallback) {
         var result;
         if (entry) {
             if (successCallback) {
-                result = workspace.checkWorkspace(privateModule.appWorkspace(), entry.fullPath, 'resolveLocalFileSystemURI');
-                if (!result) {
-                    fail(FileError.SECURITY_ERR);
-                }
-                else {
-                    // create appropriate Entry object
-                    result = (entry.isDirectory) ? new DirectoryEntry(entry.name, entry.fullPath) : new FileEntry(entry.name, entry.fullPath);
-                    successCallback(result);
-                }
+                // create appropriate Entry object
+                result = (entry.isDirectory) ? new DirectoryEntry(entry.name, entry.fullPath) : new FileEntry(entry.name, entry.fullPath);
+                successCallback(result);
             }
         }
         else {

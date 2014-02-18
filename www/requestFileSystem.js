@@ -44,9 +44,6 @@ var requestFileSystem = function(type, size, successCallback, errorCallback) {
         var success = function(file_system) {
             if (file_system) {
                 if (successCallback) {
-                    // set app workspace path as fs.root.fullPath
-                    require('xFace/workspace').updateFileSystemRoot(type, file_system);
-
                     // grab the name and root from the file system object
                     var result = new FileSystem(file_system.name, file_system.root);
                     successCallback(result);

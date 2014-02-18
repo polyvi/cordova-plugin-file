@@ -19,12 +19,12 @@
  *
 */
 
-/**
- * FileUploadResult
- * @constructor
- */
-module.exports = function FileUploadResult(size, code, content) {
-	this.bytesSent = size;
-	this.responseCode = code;
-	this.response = content;
- };
+FILESYSTEM_PROTOCOL = "cdvfile";
+
+module.exports = {
+    __format__: function(fullPath) {
+        var path = ('/'+this.name+(fullPath[0]==='/'?'':'/')+encodeURI(fullPath)).replace('//','/');
+        return FILESYSTEM_PROTOCOL + '://localhost' + path;
+    }
+};
+

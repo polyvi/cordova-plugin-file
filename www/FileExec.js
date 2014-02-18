@@ -93,9 +93,7 @@ function FileExec() {
         }
     }else if("getParent" === action){
         if(fullPath == privateModule.appWorkspace()){
-            var DirectoryEntry = require('./DirectoryEntry');
-            var entry = new DirectoryEntry('workspace', fullPath);
-            successCallback(entry);
+            successCallback({'isfile':0,'isDirectory':1,'name':'Documents','fullPath':fullPath});
             return;
         }
     }

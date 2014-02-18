@@ -485,13 +485,12 @@ describe('File workspace', function() {
             var entry = new Entry(true, false, 'entry.parent.file', root.fullPath),
 				win = jasmine.createSpy().andCallFake(function(parent) {
 					expect(parent).toBeDefined();
-					expect(parent.name).toBe("workspace");
                     expect(parent.fullPath).toCanonicallyMatch(root.fullPath);
 				}),
 				fail = createFail('Entry');
 
 			runs(function() {
-				entry.getParent(win, fail);
+				entry.getMetadata(win, fail);
 			});
 
 			waitsFor(function() { return win.wasCalled; }, "win never called", Tests.TEST_TIMEOUT);
@@ -524,13 +523,12 @@ describe('File workspace', function() {
             var entry = new Entry(false, true, 'entry.parent.dir', root.fullPath),
 				win = jasmine.createSpy().andCallFake(function(parent) {
 					expect(parent).toBeDefined();
-					expect(parent.name).toBe("workspace");
                     expect(parent.fullPath).toCanonicallyMatch(root.fullPath);
 				}),
 				fail = createFail('Entry');
 
 			runs(function() {
-				entry.getParent(win, fail);
+				entry.getMetadata(win, fail);
 			});
 
 			waitsFor(function() { return win.wasCalled; }, "win never called", Tests.TEST_TIMEOUT);
@@ -563,7 +561,6 @@ describe('File workspace', function() {
             var entry = new Entry(false, true, 'entry.workspace.dir', root.fullPath),
 				itParent = jasmine.createSpy().andCallFake(function(parent) {
                     expect(parent).toBeDefined();
-                    expect(parent.name).toBe("workspace");
                     expect(parent.fullPath).toCanonicallyMatch(root.fullPath);
                 }),
                 fail = createFail('Entry');
@@ -583,7 +580,6 @@ describe('File workspace', function() {
             var rootPath = root.fullPath,
                 itParent = jasmine.createSpy().andCallFake(function(parent) {
                     expect(parent).toBeDefined();
-                    expect(parent.name).toBe("workspace");
                     expect(parent.fullPath).toCanonicallyMatch(rootPath);
                 }),
                 fail = createFail('Entry');

@@ -48,15 +48,7 @@ function FileExec() {
         ("copyTo" === action) ||
         ("remove" === action) ||
         ("removeRecursively" === action) ||
-        ("getParent" === action) ||
-        ("readEntries" === action) ||
-        ("getFileMetadata" === action) ||
-        ("readAsText" === action) ||
-        ("readAsDataURL" === action) ||
-        ("readAsBinaryString" === action) ||
-        ("readAsArrayBuffer" === action) ||
-        ("write" === action) ||
-        ("truncate" === action) ){
+        ("getParent" === action) ){
         var result = workspace.checkWorkspace(privateModule.appWorkspace(), fullPath, functionName);
         if (!result){
             failCallback(FileError.INVALID_MODIFICATION_ERR);
@@ -96,7 +88,7 @@ function FileExec() {
             return;
         }
     }
-
+    //TODO:Add support for FileReader and FileWriter
     exec.apply(this, arguments);
 }
 

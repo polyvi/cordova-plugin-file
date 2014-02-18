@@ -19,7 +19,7 @@
  *
 */
 
-var exec = require('./FileExec'),
+var exec = require('cordova/exec'),
     FileError = require('./FileError'),
     ProgressEvent = require('./ProgressEvent');
 

@@ -19,7 +19,7 @@
  *
 */
 
-var exec = require('./FileExec'),
+var exec = require('cordova/exec'),
     modulemapper = require('cordova/modulemapper'),
     utils = require('cordova/utils'),
     File = require('./File'),

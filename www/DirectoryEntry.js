@@ -21,7 +21,7 @@
 
 var argscheck = require('cordova/argscheck'),
     utils = require('cordova/utils'),
-    exec = require('./FileExec'),
+    exec = require('cordova/exec'),
     Entry = require('./Entry'),
     FileError = require('./FileError'),
     DirectoryReader = require('./DirectoryReader');

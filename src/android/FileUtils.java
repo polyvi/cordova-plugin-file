@@ -34,6 +34,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.polyvi.xface.view.XAppWebView;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -142,7 +144,8 @@ public class FileUtils extends CordovaPlugin {
     		this.registerFilesystem(new LocalFilesystem("temporary", cordova, tempRoot));
     		this.registerFilesystem(new LocalFilesystem("persistent", cordova, persistentRoot));
     		this.registerFilesystem(new ContentFilesystem("content", cordova, webView));
-
+    		// Register xFace filesystem
+    		this.registerFilesystem(new LocalFilesystem("appworkspace", cordova, getWorkspace(webView)));
 
     		// Initialize static plugin reference for deprecated getEntry method
     		if (filePlugin == null) {
@@ -153,7 +156,12 @@ public class FileUtils extends CordovaPlugin {
     		activity.finish();
     	}
     }
-    
+
+    private String getWorkspace(CordovaWebView webView) {
+        XAppWebView appWebView = (XAppWebView) webView;
+        return appWebView.getOwnerApp().getWorkSpace();
+    }
+
     public static FileUtils getFilePlugin() {
 		return filePlugin;
 	}

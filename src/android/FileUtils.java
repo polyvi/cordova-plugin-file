@@ -460,9 +460,9 @@ public class FileUtils extends CordovaPlugin {
 
     protected LocalFilesystemURL filesystemURLforLocalPath(String localPath) {
     	LocalFilesystemURL localURL;
-		for (Filesystem fs: filesystems) {
-			if (fs != null) {
-		        localURL = fs.URLforFilesystemPath(localPath);
+		for (int index = filesystems.size()-1; index >= 0; index--) {
+			if (filesystems.get(index) != null) {
+		        localURL = filesystems.get(index).URLforFilesystemPath(localPath);
 		        if (localURL != null)
 		            return localURL;
 			}

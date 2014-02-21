@@ -67,4 +67,35 @@
     return localURL;
 }
 
+- (NSString *) resolveFilePath:(NSString *)filePath
+{
+    //有效路径形式有以下几种：
+    //1. 以'/'或'file://'开头的绝对路径
+    //2. cdvfile://localhost/<filesystemType>/<path to file>
+    //3. 相对appworkspace的相对路径
+    NSString *validFilePath = nil;
+    CDVFilesystemURL *fsURL = nil;
+    NSString *resolvedSourceFilePath = nil;
+    if ([XUtils isAbsolute:filePath])
+    {
+        filePath = [XUtils getAbsolutePath:filePath];
+        fsURL = [self fileSystemURLforLocalPath:filePath];
+    } else if ([filePath hasPrefix:kCDVFilesystemURLPrefix]){
+        fsURL = [CDVFilesystemURL fileSystemURLWithString:filePath];
+    } else if (NSNotFound !=[filePath rangeOfString:@":"].location) {
+        return NO; //不支持形如C:/a/bc的路径
+    } else{
+        resolvedSourceFilePath = [XUtils resolvePath:filePath usingWorkspace:[[self ownerApp] getWorkspace]];
+    }
+
+    if (fsURL) {
+        NSObject<CDVFileSystem> *fs = [self filesystemForURL:fsURL];
+        validFilePath = [fs filesystemPathForURL:fsURL];
+    } else {
+        validFilePath = resolvedSourceFilePath;
+    }
+
+    return validFilePath;
+}
+
 @end

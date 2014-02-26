@@ -70,9 +70,10 @@
 - (NSString *) resolveFilePath:(NSString *)filePath
 {
     //有效路径形式有以下几种：
-    //1. 以'/'或'file://'开头的绝对路径
-    //2. cdvfile://localhost/<filesystemType>/<path to file>
-    //3. 相对appworkspace的相对路径
+    //1. 以'/'开头的绝对路径
+    //2. file协议URL(处理方式同绝对路径)
+    //3. cdvfile://localhost/<filesystemType>/<path to file>
+    //4. 相对app workspace的相对路径
     NSString *validFilePath = nil;
     CDVFilesystemURL *fsURL = nil;
     NSString *resolvedSourceFilePath = nil;
@@ -89,6 +90,7 @@
     }
 
     if (fsURL) {
+        //TODO: 处理filesystemType为assets-library的情况
         NSObject<CDVFileSystem> *fs = [self filesystemForURL:fsURL];
         validFilePath = [fs filesystemPathForURL:fsURL];
     } else {

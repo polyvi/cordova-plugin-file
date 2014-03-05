@@ -475,7 +475,7 @@ public class LocalFilesystem extends Filesystem {
             // Figure out where we should be copying to
             final LocalFilesystemURL destinationURL = makeDestinationURL(newName, srcURL, destURL);
 
-	        String srcFilesystemPath = this.filesystemPathForURL(srcURL);
+	        String srcFilesystemPath = srcFs.filesystemPathForURL(srcURL);
             File sourceFile = new File(srcFilesystemPath);
             String destFilesystemPath = this.filesystemPathForURL(destinationURL);
             File destinationFile = new File(destFilesystemPath);

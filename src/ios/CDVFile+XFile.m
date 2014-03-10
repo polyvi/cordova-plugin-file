@@ -27,7 +27,7 @@
 #import <XFace/XApplication.h>
 #import <XFace/CDVPlugin+XPlugin.h>
 
-#import "CDVFile.h"
+#import "CDVFile+XFile.h"
 #import "CDVLocalFilesystem.h"
 #import "CDVAssetLibraryFilesystem.h"
 
@@ -37,34 +37,6 @@
 {
     NSString *workspace = [[self ownerApp] getWorkspace];
     [self registerFilesystem:[[CDVLocalFilesystem alloc] initWithName:@"appworkspace" root:workspace]];
-}
-
-- (CDVFilesystemURL *)fileSystemURLforLocalPath:(NSString *)localPath
-{
-    CDVFilesystemURL *localURL = nil;
-    NSUInteger index = 0;
-    // Try all installed filesystems, in order. Return the most match url.
-    // e.g. fs_type_1 fsRoot: /a/
-    //      fs_type_2 fsRoot: /a/b/
-    //      localPath: /a/b/file
-    //      result: cdvfile://localhost/fs_type_2/file not cdvfile://localhost/fs_type_1/b/file
-    for (id object in self.fileSystems) {
-        if ([object respondsToSelector:@selector(URLforFilesystemPath:)]) {
-            CDVFilesystemURL *url = [object URLforFilesystemPath:localPath];
-            if (url){
-                if (!localURL) {
-                    localURL = url;
-                    index = [[object fsRoot] length];
-                }else{
-                    if (index < [[object fsRoot] length]) {
-                        localURL = url;
-                        index = [[object fsRoot] length];
-                    }
-                }
-            }
-        }
-    }
-    return localURL;
 }
 
 - (NSString *) resolveFilePath:(NSString *)filePath

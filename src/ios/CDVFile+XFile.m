@@ -35,7 +35,15 @@
 
 - (void)pluginInitialize
 {
-    NSString *workspace = [[self ownerApp] getWorkspace];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pageDidLoad) name:CDVPageDidLoadNotification object:self.webView];
+}
+
+- (void)pageDidLoad
+{
+    //File plugin gets initialized on startup,but at the very moment,
+    //the connection between vc and default app has not yet been established,
+    //so we have to register appworkspace fs when pageDidLoad.
+    NSString *workspace = [self.ownerApp getWorkspace];
     [self registerFilesystem:[[CDVLocalFilesystem alloc] initWithName:@"appworkspace" root:workspace]];
 }
 

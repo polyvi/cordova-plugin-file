@@ -790,13 +790,26 @@ public class FileUtils extends CordovaPlugin {
      * @throws JSONException
      */
     public JSONObject getEntryForFile(File file) throws JSONException {
-        JSONObject entry;
+        JSONObject entry = null;
+        int shortestFullPath = 0;
 
-        for (Filesystem fs : filesystems) {
-             entry = fs.makeEntryForFile(file);
-             if (entry != null) {
-                 return entry;
-             }
+        // Try all installed filesystems. Return the best matching URL
+        // (determined by the shortest resulting URL)
+        for (Filesystem fs: filesystems) {
+            if (fs != null) {
+                LocalFilesystemURL url = fs.URLforFilesystemPath(file.getAbsolutePath());
+                if (url != null) {
+                    // A shorter fullPath implies that the filesystem is a better
+                    // match for the local path than the previous best.
+                    if (entry == null || (url.fullPath.length() < shortestFullPath)) {
+                        shortestFullPath = url.fullPath.length();
+                        entry = fs.makeEntryForFile(file);
+                    }
+                }
+            }
+        }
+        if (entry != null) {
+            return entry;
         }
         return null;
     }

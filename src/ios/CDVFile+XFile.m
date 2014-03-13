@@ -47,7 +47,7 @@
     [self registerFilesystem:[[CDVLocalFilesystem alloc] initWithName:@"appworkspace" root:workspace]];
 }
 
-- (NSString *) resolveFilePath:(NSString *)filePath
+- (NSString *) resolveFilePath:(NSString *)aFilePath
 {
     //有效路径形式有以下几种：
     //1. 以'/'开头的绝对路径
@@ -57,6 +57,7 @@
     NSString *validFilePath = nil;
     CDVFilesystemURL *fsURL = nil;
     NSString *resolvedSourceFilePath = nil;
+    NSString *filePath = aFilePath;
     if ([XUtils isAbsolute:filePath])
     {
         filePath = [XUtils getAbsolutePath:filePath];
@@ -64,7 +65,7 @@
     } else if ([filePath hasPrefix:kCDVFilesystemURLPrefix]){
         fsURL = [CDVFilesystemURL fileSystemURLWithString:filePath];
     } else if (NSNotFound !=[filePath rangeOfString:@":"].location) {
-        return NO; //不支持形如C:/a/bc的路径
+        return nil; //不支持形如C:/a/bc的路径
     } else{
         resolvedSourceFilePath = [XUtils resolvePath:filePath usingWorkspace:[[self ownerApp] getWorkspace]];
     }
@@ -75,6 +76,15 @@
         validFilePath = [fs filesystemPathForURL:fsURL];
     } else {
         validFilePath = resolvedSourceFilePath;
+    }
+
+    if (!validFilePath.length && [XUtils isAbsolute:aFilePath]) {
+        //处理绝对路径指向bundle资源的情况
+        NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
+        filePath = [aFilePath hasPrefix:@"/"] ? [aFilePath copy] : [[NSURL URLWithString:aFilePath] path];
+        if (filePath && [filePath hasPrefix:bundlePath]) {
+            return filePath;
+        }
     }
 
     return validFilePath;

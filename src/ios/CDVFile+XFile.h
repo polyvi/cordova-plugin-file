@@ -27,6 +27,6 @@
 
 @interface CDVFile (XFile)
 
-- (NSString *) resolveFilePath:(NSString *)filePath;
+- (NSString *) resolveFilePath:(NSString *)aFilePath;
 
 @end

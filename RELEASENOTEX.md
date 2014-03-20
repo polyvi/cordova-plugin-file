@@ -132,3 +132,53 @@
  *  Revert "Added xface auto tests for file plugin"
  *  batch modify .reviewboard
  *  batch modify .reviewboard
+
+
+## 1.0.2 (Thu Mar 20 2014)
+
+
+ *  [iOS] Add support for bundle resource
+ *  [Android]Fix file plugin can't find APPWORKSPACE file system according to file path
+ *  Update plugin version to 1.0.2-dev
+ *  Register app workspace fs when pageDidLoad to avoid registering a nil root.
+ *  Update plugin version to 1.0.1
+ *  Sync Cordova tests
+ *  Since Cordova fileSystemURLforLocalPath: is able to return the most match url, use Cordova code directly.
+ *  Update RELEASENOTES.md yet again :P
+ *  Add NOTICE file
+ *  CB-6114 Updated version and RELEASENOTES.md for release 1.0.1
+ *  CB-5980 Updated version and RELEASENOTES.md for release 1.0.0
+ *  CB-6116: Fix error where resolveLocalFileSystemURL would fail to parse file://localhost/<path> URLs
+ *  CB-6116: Fix error where resolveLocalFileSystemURL would sometimes fail to return
+ *  CB-6106: Add support for nativeURL attribute on Entry objects
+ *  Add NOTICE file
+ *  CB-6114 Updated version and RELEASENOTES.md for release 1.0.1
+ *  CB-5980 Updated version and RELEASENOTES.md for release 1.0.0
+ *  CB-6110: iOS: Fix typo in filesystemPathForURL: method
+ *  Port lmnbeyond's File fixes to Android as well
+ *  ios:Update fileSystemURLforLocalPath: to return the most match url.
+ *  Allow third-party plugin registration, and the total count of fs type is not limited to just 4.
+ *  CB-6097-Added missing files for amazon-fireos platform. Added onLoad flag to true.
+ *  CB-6087: Android, iOS: Load file plugin on startup
+ *  CB-6013 [BlackBerry10] wrap webkit prefixed called in requestAnimationFrame
+ *  Update plugin writers' documentation
+ *  CB-6080: Fix file copy when src and dst are on different local file systems
+ *  Update RELEASENOTES.md
+ *  CB-6057: Add notes for plugin authors about dealing with cdvfile:// URLs
+ *  CB-6057: Add methods to convert from URLs to filesystem paths
+ *  Android: Remove terribly out-of-date comment about only SD card being accessible
+ *  CB-6050: Create instance method for returning a FileEntry structure given a device file path
+ *  CB-2432 CB-3185 CB-5975: Correctly handle content:// urls especially when non-local-to-device
+ *  Docs: Fix typos. (Closes issue 26)
+ *  ios: Remove unused local (Closes: issue 28)
+ *  CB-6022: Add upgrade notes to doc
+ *  CB-5233: ios: Fixes for asset-library URLs
+ *  CB-6012: Preserve query parameters in cdvfile:// urls; strip query params from local filesystem urls when searching for files
+ *  CB-6010: ios: Test filesystem plugins for presence of optional URLforFilesystemPath before calling
+ *  Add release notes for 1.0.1
+ *  CB-5980 Incremented plugin version on dev branch.
+ *  CB-5980 Updated version and RELEASENOTES.md for release 1.0.0
+ *  CB-5959: Android: Ensure that directories return size 0
+ *  CB-5959: Android, iOS: Return size with Entry.getMetadata() method
+ *  [Android]Fix copy failed when cross file system
+ *  Incremented plugin version on dev branch to 0.2.5-dev

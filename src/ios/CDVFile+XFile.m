@@ -39,7 +39,8 @@
     //the connection between vc and default app has not yet been established,
     //so we have to register appworkspace fs when pageDidLoad.
     NSString *workspace = [self.ownerApp getWorkspace];
-    [self registerFilesystem:[[CDVLocalFilesystem alloc] initWithName:@"appworkspace" root:workspace]];
+    id<CDVFileSystem> fs = [[CDVLocalFilesystem alloc] initWithName:@"appworkspace" root:workspace];
+    [self.fileSystems insertObject:fs atIndex:3];
 }
 
 - (NSString *) resolveFilePath:(NSString *)aFilePath

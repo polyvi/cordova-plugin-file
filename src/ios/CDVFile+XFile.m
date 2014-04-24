@@ -33,11 +33,6 @@
 
 @implementation CDVFile (XFile)
 
-- (void)pluginInitialize
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pageDidLoad) name:CDVPageDidLoadNotification object:self.webView];
-}
-
 - (void)pageDidLoad
 {
     //File plugin gets initialized on startup,but at the very moment,

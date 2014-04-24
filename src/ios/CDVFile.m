@@ -314,6 +314,7 @@ NSString* const kCDVFilesystemURLPrefix = @"cdvfile";
     [self registerExtraFileSystems:[self getExtraFileSystemsPreference:self.viewController]
                   fromAvailableSet:[self getAvailableFileSystems]];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pageDidLoad) name:CDVPageDidLoadNotification object:self.webView];
 }
 
 
@@ -1042,6 +1043,12 @@ NSString* const kCDVFilesystemURLPrefix = @"cdvfile";
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Cannot resolve URL to a file"];
     }
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+#pragma mark XFile
+
+- (void)pageDidLoad
+{
 }
 
 @end

@@ -4336,7 +4336,7 @@ describe('File API', function() {
                     expect(entry.name).toCanonicallyMatch(file2);
                     expect(entry.fullPath).toCanonicallyMatch(fullPath);
                     expect(entry.filesystem).toBeDefined();
-                    expect(entry.filesystem.name).toEqual("persistent");
+                    expect(entry.filesystem.name).toEqual(persistent_root.filesystem.name);
 
                     // cleanup
                     entry.remove();
@@ -4381,7 +4381,7 @@ describe('File API', function() {
                     persistent_root.getFile(file1, {create: true}, function(entry) {
                         expect(entry).toBeDefined();
                         expect(entry.filesystem).toBeDefined();
-                        expect(entry.filesystem.name).toEqual("persistent");
+                        expect(entry.filesystem.name).toEqual(persistent_root.filesystem.name);
                         sourceEntry = entry; // Save for later cleanup
                         entry.copyTo(temp_root, file2, validateFile, fail);
                     }, fail);
@@ -4414,7 +4414,7 @@ describe('File API', function() {
                     expect(entry.name).toCanonicallyMatch(file2);
                     expect(entry.fullPath).toCanonicallyMatch(fullPath);
                     expect(entry.filesystem).toBeDefined();
-                    expect(entry.filesystem.name).toEqual("persistent");
+                    expect(entry.filesystem.name).toEqual(persistent_root.filesystem.name);
 
                     // cleanup
                     entry.remove();
@@ -4459,7 +4459,7 @@ describe('File API', function() {
                     persistent_root.getFile(file1, {create: true}, function(entry) {
                         expect(entry).toBeDefined();
                         expect(entry.filesystem).toBeDefined();
-                        expect(entry.filesystem.name).toEqual("persistent");
+                        expect(entry.filesystem.name).toEqual(persistent_root.filesystem.name);
                         sourceEntry = entry; // Save for later cleanup
                         entry.moveTo(temp_root, file2, validateFile, fail);
                     }, fail);

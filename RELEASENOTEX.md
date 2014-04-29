@@ -182,3 +182,45 @@
  *  CB-5959: Android, iOS: Return size with Entry.getMetadata() method
  *  [Android]Fix copy failed when cross file system
  *  Incremented plugin version on dev branch to 0.2.5-dev
+
+
+## 1.0.3 (Tue Apr 29 2014)
+
+
+ *  Update tests to pass xFace File Tests
+ *  [iOS]Insert app workspace fs before other extra fs
+ *  [iOS]Update CDVFile pluginInitialize: to observe pageDidLoad
+ *  Sync Cordova mobile-spec file tests
+ *  CB-6452 Updated version and RELEASENOTES.md for release 1.1.0
+ *  Add docs about the extraFileSystems <preference>
+ *  CB-6460: Update license headers
+ *  CB-4965: Remove tests from file plugin
+ *  Android: Allow file:/ URLs
+ *  CB-6422 [windows8] use cordova/exec/proxy
+ *  CB-6249: Opportunistically resolve content urls to file
+ *  CB-6394: Add extra filesystem roots
+ *  CB-6394: Fix file resolution for the device root case
+ *  CB-6394: ios: Return ENCODING_ERR when fs name is not valid
+ *  CB-6393: Change behaviour of toURL and toNativeURL
+ *  ios: Style: plugin initialization
+ *  ios: Style: Don't make code look unreachable
+ *  ios: Fix handling of file URLs with encoded spaces
+ *  Always use Android's recommended temp file location for temporary file system
+ *  CB-6352: Allow FileSystem objects to be serialized to JSON
+ *  CB-5959 size is explicitly 0 if not set, file.spec.46&47 are testing the type of size
+ *  CB-6242 [BlackBerry10] Add deprecated version of resolveLocalFileSystemURI
+ *  CB-6242 [BlackBerry10] add file:/// prefix for toURI / toURL
+ *  CB-6242 [BlackBerry10] Polyfill window.requestAnimationFrame for OS < 10.2
+ *  CB-6242 [BlackBerry10] Override window.resolveLocalFileSystemURL
+ *  CB-6212 iOS: fix warnings compiled under arm64 64-bit
+ *  ios: Don't cache responses from CDVFile's URLProtocol
+ *  CB-6199 iOS: Fix toNativeURL() not escaping characters properly
+ *  CB-6148: Fix cross-filesystem copy and move
+ *  fixed setMetadata() to use the formatted fullPath
+ *  fixed formatting
+ *  fixed typo "unterminated statement"
+ *  corrected typo which leads to a "comma expression"
+ *  CB-4952: ios: Resolve symlinks in file:// URLs
+ *  CB-6114 Incremented plugin version on dev branch.
+ *  [Android]sync cordova CB-6413: Fix feature detection of ArrayBuffer/Blob support on Sony Android 2.3.7
+ *  Incremented plugin version on dev branch to 1.0.3-dev
